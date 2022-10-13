@@ -35,7 +35,7 @@ class CountriesListAdapter(private val countriesList: ArrayList<Country>) :
     class CountriesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val countryName = view.findViewById<TextView>(R.id.countryName)
         fun bind(country: Country) {
-            countryName.text = country.name
+            countryName.text = country.countryName
         }
     }
 }
