@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -38,6 +39,7 @@ android {
 
 dependencies {
 
+
     def retrofitVersion = "2.9.0"
     def rxJavaVersion = "2.0.1"
     def rxAndroidVersion = "2.0.1"
@@ -52,6 +54,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+    // SplashScreen API
+    implementation 'androidx.core:core-splashscreen:1.0.0'
     // ViewModel and LiveData dependencies
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.0-alpha02'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha02'
@@ -67,8 +71,8 @@ dependencies {
     // Dagger dependencies
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     // Glide dependencies
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     // RecyclerView dependencies
