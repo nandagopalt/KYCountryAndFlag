@@ -3,13 +3,19 @@ package com.amalwin.kycountryandflag.views
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amalwin.kycountryandflag.R
+import com.amalwin.kycountryandflag.databinding.CountryLayoutBinding
 import com.amalwin.kycountryandflag.models.Country
+import com.amalwin.kycountryandflag.utils.getCircularProgressDrawable
+import com.amalwin.kycountryandflag.utils.setImage
 
 class CountriesListAdapter(private val countriesList: ArrayList<Country>) :
     RecyclerView.Adapter<CountriesListAdapter.CountriesListViewHolder>() {
+
+    private lateinit var countryLayoutBinding: CountryLayoutBinding
 
     fun updateCountriesList(countriesList: List<Country>) {
         this.countriesList.clear()
@@ -18,9 +24,11 @@ class CountriesListAdapter(private val countriesList: ArrayList<Country>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountriesListViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.country_layout, parent, false)
-        return CountriesListViewHolder(view)
+        countryLayoutBinding =
+            CountryLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        /*val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.country_layout, parent, false)*/
+        return CountriesListViewHolder(countryLayoutBinding)
     }
 
     override fun onBindViewHolder(holder: CountriesListViewHolder, position: Int) {
@@ -32,10 +40,18 @@ class CountriesListAdapter(private val countriesList: ArrayList<Country>) :
         return countriesList.size
     }
 
-    class CountriesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val countryName = view.findViewById<TextView>(R.id.countryName)
+    class CountriesListViewHolder(countryItemBinding: CountryLayoutBinding) :
+        RecyclerView.ViewHolder(countryItemBinding.root) {
+        private val countryName = countryItemBinding.countryName
+        private val capitalName = countryItemBinding.capitalName
+        private val flagImage = countryItemBinding.countryFlagImageView
+        private val view = countryItemBinding.root
+        private val progressDrawable = getCircularProgressDrawable(view.context)
         fun bind(country: Country) {
             countryName.text = country.countryName
+            capitalName.text = country.capitalName
+            flagImage.setImage(country.countryFlag, progressDrawable)
+
         }
     }
 }

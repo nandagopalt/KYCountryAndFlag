@@ -1,13 +1,16 @@
 package com.amalwin.kycountryandflag.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amalwin.kycountryandflag.di.DaggerCountryAPIComponent
 import com.amalwin.kycountryandflag.models.Country
 import com.amalwin.kycountryandflag.models.CountryService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 class ListViewModel : ViewModel() {
@@ -15,20 +18,26 @@ class ListViewModel : ViewModel() {
     val isCountriesLoadingErrorLiveData = MutableLiveData<Boolean>()
     val isLoadingLiveData = MutableLiveData<Boolean>()
 
-    private val countryService = CountryService()
+    @Inject
+    lateinit var countryService: CountryService
     private val disposable = CompositeDisposable()
+
+    init {
+        DaggerCountryAPIComponent.create().inject(this)
+    }
 
     fun refresh() {
         fetchCountries();
     }
 
     private fun fetchCountries() {
+        isCountriesLoadingErrorLiveData.value = false
         isLoadingLiveData.value = true
         disposable.add(
             countryService.getAllCountries()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object: DisposableSingleObserver<List<Country>>() {
+                .subscribeWith(object : DisposableSingleObserver<List<Country>>() {
                     /**
                      * Notifies the [SingleObserver] with a single item and that the [Single] has finished sending
                      * push-based notifications.
@@ -40,7 +49,7 @@ class ListViewModel : ViewModel() {
                      * the item emitted by the `Single`
                      */
                     override fun onSuccess(countryList: List<Country>) {
-                       countriesListLiveData.value = countryList
+                        countriesListLiveData.value = countryList
                         isLoadingLiveData.value = false
                         isCountriesLoadingErrorLiveData.value = false
                     }
@@ -57,6 +66,7 @@ class ListViewModel : ViewModel() {
                     override fun onError(e: Throwable) {
                         isCountriesLoadingErrorLiveData.value = true
                         isLoadingLiveData.value = false
+                        Log.e("Error", e.cause.toString())
                     }
                 })
         )

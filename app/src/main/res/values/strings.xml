@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">KYCountryAndFlag</string>
-    <string name="please_check_later">Please check later</string>
+    <string name="app_name">KYFlag</string>
+    <string name="please_check_later">Something went wrong !\nPlease check later.</string>
     <string name="country_name">Country Name</string>
     <string name="capital_name">Capital Name</string>
+    <string name="splash_title">Know your Flag</string>
 </resources>
